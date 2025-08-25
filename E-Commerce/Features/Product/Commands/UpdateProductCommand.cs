@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_Commerce.Features.Category.Commands
+namespace E_Commerce.Features.Product.Commands
 {
     public class UpdateProductCommand : IRequest<ProductModel>
     {
