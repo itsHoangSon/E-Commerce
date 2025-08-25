@@ -56,6 +56,7 @@ jobs:
         labels: ${{ steps.meta-ecommerce.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        platforms: windows/amd64
 
   build-identity-service-windows:
     runs-on: windows-latest
@@ -101,6 +102,7 @@ jobs:
         labels: ${{ steps.meta-identity.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        platforms: windows/amd64
 
   build-ecommerce-service-linux:
     runs-on: ubuntu-latest
