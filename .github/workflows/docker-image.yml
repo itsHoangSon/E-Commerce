@@ -56,7 +56,6 @@ jobs:
         labels: ${{ steps.meta-ecommerce.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        platforms: windows/amd64
 
   build-identity-service-windows:
     runs-on: windows-latest
@@ -102,7 +101,6 @@ jobs:
         labels: ${{ steps.meta-identity.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        platforms: windows/amd64
 
   build-ecommerce-service-linux:
     runs-on: ubuntu-latest
@@ -142,7 +140,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./ECommerceService.WebApi/Dockerfile
+        file: ./ECommerceService.WebApi/Dockerfile.linux
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta-ecommerce-linux.outputs.tags }}
         labels: ${{ steps.meta-ecommerce-linux.outputs.labels }}
@@ -188,7 +186,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./IdentityService.WebApi/Dockerfile
+        file: ./IdentityService.WebApi/Dockerfile.linux
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta-identity-linux.outputs.tags }}
         labels: ${{ steps.meta-identity-linux.outputs.labels }}
@@ -236,7 +234,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./ECommerceService.WebApi/Dockerfile
+        file: ./ECommerceService.WebApi/Dockerfile.linux
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ steps.meta-multi.outputs.tags }}
@@ -250,7 +248,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./IdentityService.WebApi/Dockerfile
+        file: ./IdentityService.WebApi/Dockerfile.linux
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ steps.meta-multi.outputs.tags }}
