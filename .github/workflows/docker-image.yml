@@ -125,14 +125,27 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract metadata for ECommerce Service Linux
+      id: meta-ecommerce-linux
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/ecommerce-service-linux
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{short}}
+          type=raw,value=latest,enable={{is_default_branch}}
+
     - name: Build and push ECommerce Service Docker image (Linux)
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./ECommerceService.WebApi/Dockerfile.linux
+        file: ./ECommerceService.WebApi/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta-ecommerce.outputs.tags }}
-        labels: ${{ steps.meta-ecommerce.outputs.labels }}
+        tags: ${{ steps.meta-ecommerce-linux.outputs.tags }}
+        labels: ${{ steps.meta-ecommerce-linux.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64
@@ -158,14 +171,27 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract metadata for Identity Service Linux
+      id: meta-identity-linux
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/identity-service-linux
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{short}}
+          type=raw,value=latest,enable={{is_default_branch}}
+
     - name: Build and push Identity Service Docker image (Linux)
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./IdentityService.WebApi/Dockerfile.linux
+        file: ./IdentityService.WebApi/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta-identity.outputs.tags }}
-        labels: ${{ steps.meta-identity.outputs.labels }}
+        tags: ${{ steps.meta-identity-linux.outputs.tags }}
+        labels: ${{ steps.meta-identity-linux.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64
@@ -199,8 +225,8 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/ecommerce-service
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/identity-service
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/ecommerce-service-multi
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/identity-service-multi
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
@@ -210,7 +236,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./ECommerceService.WebApi/Dockerfile.linux
+        file: ./ECommerceService.WebApi/Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ steps.meta-multi.outputs.tags }}
@@ -224,7 +250,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./IdentityService.WebApi/Dockerfile.linux
+        file: ./IdentityService.WebApi/Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ steps.meta-multi.outputs.tags }}
